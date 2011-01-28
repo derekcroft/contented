@@ -28,6 +28,7 @@ group :test do
   gem 'autotest-rails'
   gem 'launchy'
   gem 'faker'
+  gem 'mocha'
   gem 'capybara'
   gem 'cucumber-rails'
   gem 'capybara'
