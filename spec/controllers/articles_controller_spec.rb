@@ -7,20 +7,20 @@ describe ArticlesController do
   
   describe "GET 'index'" do
     it "should return available articles" do
-      article = mock_model(Article, @attributes)
-      articles = Article.should_receive(:all).and_return [article]
+      article = mock(Article, @attributes)
+      articles = Article.expects(:all).returns [article]
       get 'index'
     end
   end
 
   describe "DELETE 'destroy'" do
     before(:each) do
-      @article = mock_model Article
-      @article.stub!(:id).and_return 2
+      @article = mock Article
+      @article.stub!(:id).returns 2
     end
 
     it "should destroy an article" do
-      Article.should_receive(:delete).with(@article.id).and_return @article
+      Article.expects(:delete).with(@article.id).returns @article
       delete 'destroy', :id => @article.id
     end
     
@@ -33,42 +33,42 @@ describe ArticlesController do
   
   describe "GET 'show'" do
     it "should return the relevant article" do
-      article = mock_model Article
-      article.stub!(:id).and_return 2
-      Article.should_receive(:find).with(article.id).and_return article
+      article = mock Article
+      article.stub!(:id).returns 2
+      Article.expects(:find).with(article.id).returns article
       get 'show', :id => article.id
     end
   end
 
   describe "GET 'new'" do
     it "should build a new article" do
-      article = mock_model(Article, :save => false)
-      Article.should_receive(:new).and_return article
+      article = mock(Article, :save => false)
+      Article.expects(:new).returns article
       get 'new'
     end
   end
   
   describe "GET 'edit'" do
     it "should get the article" do
-      article = mock_model Article
-      article.stub!(:id).and_return 2
-      Article.should_receive(:find).with(2).and_return article
+      article = mock Article
+      article.stub!(:id).returns 2
+      Article.expects(:find).with(2).returns article
       get 'edit', :id => article.id
     end
   end
 
   describe "PUT 'update'" do
     before(:each) do
-      @article = mock_model Article
-      @article.stub!(:id).and_return 2
+      @article = mock Article
+      @article.stub!(:id).returns 2
       @attrs = { "body" => "bar", "title" => "foo" }
-      Article.should_receive(:find).with(2).and_return @article
-      @article.should_receive(:update_attributes).with(@attrs).and_return true
+      Article.expects(:find).with(2).returns @article
+      @article.expects(:update_attributes).with(@attrs).returns true
     end
 
     context "success" do
       it "should redirect to show article page" do
-        @article.stub!(:valid?).and_return true
+        @article.stub!(:valid?).returns true
         put 'update', :id => 2, :article => @attrs      
         response.should redirect_to(article_path(@article))
       end
@@ -76,7 +76,7 @@ describe ArticlesController do
 
     context "failure" do
       it "should render the new article template" do
-        @article.stub!(:valid?).and_return false
+        @article.stub!(:valid?).returns false
         put 'update', :id => 2, :article => @attrs      
         response.should render_template("new")
       end
@@ -86,11 +86,11 @@ describe ArticlesController do
   describe "POST 'create'" do
     context "success" do
       before(:each) do
-        @article = mock_model(Article, @attributes)
+        @article = mock(Article, @attributes)
       end
       
       it "should create a new article" do
-        Article.should_receive(:create).with(@attributes).and_return @article
+        Article.expects(:create).with(@attributes).returns @article
         post :create, :article => @attributes
       end
       
@@ -103,11 +103,11 @@ describe ArticlesController do
 
     context "failure" do
       before(:each) do
-        @article = mock_model(Article, :title => "")
+        @article = mock(Article, :title => "")
       end
 
       it "should create a new article" do
-        Article.should_receive(:create).with({}).and_return @article
+        Article.expects(:create).with({}).returns @article
         post :create, :article => {}
       end
 
